@@ -29,11 +29,11 @@ header b{font-size:22px;font-weight:900;display:block;line-height:1.1}header sma
 main{background:var(--bg);border-radius:24px 24px 0 0;margin-top:-20px;position:relative;padding:16px max(4vw,14px) calc(96px + env(safe-area-inset-bottom));max-width:640px;margin-inline:auto}
 @media(min-width:640px){main{border-radius:24px}}
 h2{font-size:24px;font-weight:900;margin:6px 0 12px;line-height:1.1}
-.quick{display:flex;gap:6px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 8px;margin:0 -4px}
-.qb{flex:0 0 84px;scroll-snap-align:start;display:flex;flex-direction:column;align-items:center;gap:5px;padding:2px;text-align:center}
-.qc{width:66px;height:66px;border-radius:50%;display:grid;place-items:center;color:#fff;position:relative;box-shadow:0 6px 16px -8px #0008}
+.quick{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;padding:4px 0 8px}
+.qb{display:flex;flex-direction:column;align-items:center;gap:4px;padding:2px 0;text-align:center}
+.qc{width:min(58px,15vw);height:min(58px,15vw);border-radius:50%;display:grid;place-items:center;color:#fff;position:relative;box-shadow:0 6px 16px -8px #0008}
 .qc.on::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:3px solid var(--c-sono);opacity:.6}
-.qn{font-size:12px;font-weight:800;color:var(--mute);line-height:1.1}.qa{font-size:14px;font-weight:900;line-height:1.15;font-variant-numeric:tabular-nums}
+.qn{font-size:12px;white-space:nowrap;font-weight:800;color:var(--mute);line-height:1.1}.qa{font-size:12.5px;font-weight:900;line-height:1.15;font-variant-numeric:tabular-nums}
 .dnav{display:flex;align-items:center;gap:6px;margin:10px 0 6px}
 .dnav b{flex:1;font-size:17px;font-weight:900;text-align:center}
 .ar{width:44px;background:var(--card);border:1px solid var(--line);font-size:20px;font-weight:900}
@@ -45,7 +45,7 @@ h2{font-size:24px;font-weight:900;margin:6px 0 12px;line-height:1.1}
 .now{position:absolute;top:0;bottom:0;border-left:2px solid var(--c-mamadeira)}
 .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 16px;margin-bottom:10px}
 .sum{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:8px}
-.sum span{display:flex;align-items:center;gap:5px;font-weight:900;font-variant-numeric:tabular-nums}
+.sum span{display:flex;align-items:center;gap:6px;font-weight:900;font-variant-numeric:tabular-nums}.sum small{font-size:14px;font-weight:700;color:var(--mute)}
 .lab{font-size:14px;font-weight:800;color:var(--mute)}
 .ent{display:grid;grid-template-columns:40px 1fr auto;gap:12px;align-items:start;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px 14px;margin-bottom:8px}
 .ei{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:#fff}
@@ -79,8 +79,8 @@ h2{font-size:24px;font-weight:900;margin:6px 0 12px;line-height:1.1}
 .btn{background:var(--ink);color:var(--bg);font-weight:900;padding:0 18px}
 .btn2{background:var(--card2);font-weight:800;padding:0 16px}
 .ok{color:#3fb39c;font-weight:900}
-nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:6px 6px calc(6px + env(safe-area-inset-bottom));z-index:5}
-nav button{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12px;font-weight:800;color:var(--mute);min-height:54px}
+nav{position:fixed;left:0;right:0;bottom:calc(-1 * var(--gap,0px));background:var(--card);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:6px 6px calc(6px + env(safe-area-inset-bottom));z-index:5}
+nav button{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11.5px;white-space:nowrap;font-weight:800;color:var(--mute);min-height:54px}
 nav button.on{color:var(--ink)}nav button.on svg{background:var(--card2);border-radius:99px;padding:2px 14px;width:52px}
 #sheetBg{position:fixed;inset:0;background:#0008;display:none;align-items:flex-end;justify-content:center;z-index:9}
 #sheetBg.on{display:flex}
@@ -172,8 +172,8 @@ function quickRow(){
  const dis=(!db||!canWrite)?'disabled':'';
  return`<div class="quick">${ORDER.map(k=>{let a;
   if(k==='sono'&&sono)a='Dormindo<br>'+durTxt((Date.now()-num(sono.inicio))/1000);
-  else{const l=lastOf(k);a=l?ago(endOf(l)):'—'}
-  return`<button class="qb" data-new="${k}" ${dis}><span class="qc${k==='sono'&&sono?' on':''}" style="background:${col(k)}">${ic(k,30)}</span><span class="qn">${T[k].n}</span><span class="qa">${a}</span></button>`}).join('')}</div>`;
+  else{const l=lastOf(k);a=l?ago(endOf(l)).replace(' atrás','<br>atrás'):'—'}
+  return`<button class="qb" data-new="${k}" ${dis}><span class="qc${k==='sono'&&sono?' on':''}" style="background:${col(k)}">${ic(k,26)}</span><span class="qn">${T[k].n}</span><span class="qa">${a}</span></button>`}).join('')}</div>`;
 }
 function strip(d0,d1,items){
  const P=t=>((t-d0)/(d1-d0)*100).toFixed(2);let h='';
@@ -194,7 +194,8 @@ function renderHome(){
  const c={};for(const r of items)if(num(r.t)>=d0)c[r.tipo]=(c[r.tipo]||0)+1;
  const ml=items.filter(r=>r.tipo==='mamadeira'&&num(r.t)>=d0).reduce((a,r)=>a+num(r.ml),0);
  const sl=strItems.filter(r=>r.tipo==='sono').reduce((a,r)=>a+Math.max(0,Math.min(num(r.fim)||Date.now(),d1)-Math.max(num(r.t),d0)),0);
- const sum=ORDER.filter(k=>c[k]).map(k=>`<span style="color:${col(k)}">${ic(k,18)}<b style="color:var(--ink)">${c[k]}</b></span>`).join('')+(ml?`<span>${ml} ml</span>`:'')+(sl?`<span>${durTxt(sl/1000)} de sono</span>`:'');
+ const SN={mamadeira:['mamadeira','mamadeiras'],fralda:['fralda','fraldas'],sono:['soneca','sonecas'],banho:['banho','banhos'],saude:['registro','registros']};
+ const sum=ORDER.filter(k=>c[k]).map(k=>`<span style="color:${col(k)}">${ic(k,18)}<b style="color:var(--ink)">${c[k]}</b><small>${SN[k][c[k]===1?0:1]}${k==='mamadeira'&&ml?' · '+ml+' ml':''}${k==='sono'&&sl?' · '+durTxt(sl/1000):''}</small></span>`).join('');
  const list=items.filter(r=>num(r.t)>=d0).sort((a,b)=>num(b.t)-num(a.t));
  $('#view').innerHTML=quickRow()+`<div class="dnav"><button class="ar" data-day="1" aria-label="Dia anterior">‹</button><b>${dName(dayOff)}${dayOff>1?'':' · '+dLab(d0)}</b><button class="ar" data-day="-1" ${dayOff?'':'disabled'} aria-label="Próximo dia">›</button></div>`
   +strip(d0,d1,strItems)
@@ -352,6 +353,8 @@ $('#lForm').addEventListener('submit',async e=>{e.preventDefault();const email=$
   if(r.error){$('#lErr').textContent=/Invalid login/i.test(r.error.message)?'E-mail ou senha errados.':'Não deu certo: '+r.error.message;return}
   start(r.data.session);
  }finally{$('#lBtn').disabled=false}});
+function fixGap(){let g=0;try{if(navigator.standalone||matchMedia('(display-mode: standalone)').matches){const d=screen.height-window.innerHeight;if(d>0&&d<120)g=d}}catch(e){}document.documentElement.style.setProperty('--gap',g+'px')}
+fixGap();addEventListener('resize',fixGap);addEventListener('orientationchange',()=>setTimeout(fixGap,300));
 render();
 sb.auth.getSession().then(({data})=>{if(data.session)start(data.session)});
 }
