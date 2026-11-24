@@ -105,6 +105,13 @@ input{font:inherit;font-size:17px;font-weight:800;color:var(--ink);background:va
 #login h1{margin:0 0 4px;font-size:28px;font-weight:900}#login p{margin:0 0 18px;color:var(--mute);font-weight:700}
 #lErr{color:var(--c-mamadeira);font-weight:800;min-height:22px;margin:-4px 0 8px}
 .link{color:var(--mute);font-weight:800;text-decoration:underline;width:100%;margin-top:8px}
+.prep{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:10px 16px;margin:4px 0 8px;text-align:left}
+.prep b{font-weight:900}.prep span{color:var(--mute);font-size:13px;font-weight:700;display:block}.prep i{font-style:normal;font-size:22px;color:var(--c-mamadeira)}
+.res{background:var(--bg);border:1px solid var(--line);border-radius:18px;padding:16px;margin:4px 0 12px;text-align:center}
+.res .big{display:flex;justify-content:center;gap:18px;align-items:flex-end}
+.res .big div{font-size:15px;font-weight:800;color:var(--mute)}.res .big b{display:block;font-size:40px;line-height:1;font-weight:900;color:var(--ink);font-variant-numeric:tabular-nums}
+.res .plus{font-size:28px;font-weight:900;color:var(--mute);padding-bottom:18px}
+.res p{margin:12px 0 0;font-weight:700;font-size:15px}.res .warn{color:var(--c-saude)}
 .note{background:var(--card2);border-radius:14px;padding:10px 14px;font-weight:700;font-size:14px;margin-bottom:12px}
 @media(prefers-reduced-motion:no-preference){.qc{transition:transform .12s}.qb:active .qc{transform:scale(.92)}}
 </style></head><body>
@@ -197,7 +204,7 @@ function renderHome(){
  const SN={mamadeira:['mamadeira','mamadeiras'],fralda:['fralda','fraldas'],sono:['soneca','sonecas'],banho:['banho','banhos'],saude:['registro','registros']};
  const sum=ORDER.filter(k=>c[k]).map(k=>`<span style="color:${col(k)}">${ic(k,18)}<b style="color:var(--ink)">${c[k]}</b><small>${SN[k][c[k]===1?0:1]}${k==='mamadeira'&&ml?' · '+ml+' ml':''}${k==='sono'&&sl?' · '+durTxt(sl/1000):''}</small></span>`).join('');
  const list=items.filter(r=>num(r.t)>=d0).sort((a,b)=>num(b.t)-num(a.t));
- $('#view').innerHTML=quickRow()+`<div class="dnav"><button class="ar" data-day="1" aria-label="Dia anterior">‹</button><b>${dName(dayOff)}${dayOff>1?'':' · '+dLab(d0)}</b><button class="ar" data-day="-1" ${dayOff?'':'disabled'} aria-label="Próximo dia">›</button></div>`
+ $('#view').innerHTML=quickRow()+`<button class="prep" data-prep ${(!db||!canWrite)?'disabled':''}><span><b>Preparar mamadeira</b><span>Calcula água e medidas da fórmula</span></span><i>›</i></button><div class="dnav"><button class="ar" data-day="1" aria-label="Dia anterior">‹</button><b>${dName(dayOff)}${dayOff>1?'':' · '+dLab(d0)}</b><button class="ar" data-day="-1" ${dayOff?'':'disabled'} aria-label="Próximo dia">›</button></div>`
   +strip(d0,d1,strItems)
   +`<div class="card"><div class="lab">${age()?'Idade: '+esc(age()):'Resumo do dia'}</div><div class="sum">${sum||'<span class="lab">Nada registrado neste dia</span>'}</div></div>`
   +(list.length?list.map(entry).join(''):`<div class="empty">${dayOff?'Sem registros neste dia.':'Toque num botão lá em cima para registrar.'}</div>`);
@@ -251,6 +258,8 @@ function renderConta(){
  <div class="card"><div class="lab" style="margin-bottom:10px">Bebê</div>
   <label class="f"><span>Nome</span><input id="cNome" value="${esc((bebe&&bebe.nome)||'')}" maxlength="40"></label>
   <label class="f"><span>Nascimento</span><input type="date" id="cNasc" value="${esc((bebe&&bebe.nascimento)||'')}"></label>
+  <label class="f"><span>Fórmula</span><input id="cForm" value="${esc((bebe&&bebe.formula)||'')}" maxlength="60"></label>
+  <label class="f"><span>ml de água por medida (conforme a lata)</span><input type="number" inputmode="numeric" id="cPer" value="${num(bebe&&bebe.ml_por_medida)||30}" min="10" max="100"></label>
   <button class="btn" data-savebebe ${dis}>Salvar</button></div>
  <div class="card"><div class="lab">Cuidadores</div>${cu}<p class="lab" style="font-weight:700;margin:10px 0 0">Só os e-mails liberados no banco conseguem entrar. Para liberar outra pessoa (uma avó, por exemplo), peça ao Claude.</p></div>
  <div class="card"><div class="row2"><span><b>Exportar dados</b><br><span class="lab">Baixa tudo em CSV para abrir numa planilha</span></span><button class="btn2" data-csv>Baixar</button></div><div class="row2"><span><b>Sair desta conta</b></span><button class="btn2" data-logout>Sair</button></div></div>`;
@@ -276,8 +285,8 @@ const toIn=t=>{const d=new Date(t);return`${d.getFullYear()}-${pad(d.getMonth()+
 const fromIn=v=>{const m=String(v).match(/(\d+)-(\d+)-(\d+)T(\d+):(\d+)/);return m?new Date(+m[1],m[2]-1,+m[3],+m[4],+m[5]).getTime():Date.now()};
 const opts=(key,list,cur)=>`<div class="opts">${list.map(([v,l])=>`<button class="opt${v===cur?' on':''}" data-${key}="${v}">${l}</button>`).join('')}</div>`;
 const notaF=v=>`<label class="f"><span>Nota (opcional)</span><input id="fNota" value="${esc(v||'')}" maxlength="140"></label>`;
-function openSheet(k,rec){
- if(!db||!canWrite)return;const s=$('#sheet'),R=rec||{},st={};let body='';
+function openSheet(k,rec,pre){
+ if(!db||!canWrite)return;const s=$('#sheet'),R=rec||pre||{},st={};let body='';
  const when=(id,lab,t)=>`<label class="f"><span>${lab}</span><input type="datetime-local" id="${id}" value="${toIn(t)}"></label>`;
  if(k==='mamadeira'){const last=lastOf('mamadeira');st.ml=num(R.ml)||(last?num(last.ml):60)||60;
   body=when('fT','Horário',R.t||Date.now())+`<div class="f"><span>Quanto tomou (ml)</span>${opts('ml',[20,30,45,60,90,120].map(v=>[v,v]),st.ml)}</div><label class="f"><span>Ou digite</span><input type="number" inputmode="numeric" id="fMl" value="${st.ml}"></label><label class="f"><span>Preparou quanto? (se sobrou, opcional)</span><input type="number" inputmode="numeric" id="fPrep" value="${num(R.preparado)||''}"></label>`+notaF(R.nota)}
@@ -307,6 +316,27 @@ function openSheet(k,rec){
    if(k==='sono'){const f=fromIn($('#fF').value);if(f<=t){$('#fF').focus();return}o.fim=f;msg='Sono registrado'}
    closeSheet();saveReg(o,rec,msg)}};
 }
+function openPrep(){
+ if(!db)return;const s=$('#sheet'),per=Math.max(10,num(bebe&&bebe.ml_por_medida)||30),fn=(bebe&&bebe.formula)||'fórmula';
+ const last=lastOf('mamadeira');let want=last?num(last.ml)||per:per;
+ s.innerHTML=`<h3><span class="ei" style="background:${col('mamadeira')}">${ic('mamadeira',20)}</span>Preparar mamadeira</h3>
+  <p class="lab" style="margin:-6px 0 14px">${esc(fn)} · 1 medida rasa para cada ${per} ml de água</p>
+  <div class="f"><span>Quanto vai oferecer (ml)</span>${opts('w',[30,40,50,60,90].map(v=>[v,v]),want)}</div>
+  <label class="f"><span>Ou digite</span><input type="number" inputmode="numeric" id="pW" value="${want}"></label>
+  <div class="res" id="pRes"></div>
+  <div class="sbtns"><button class="sec" data-close>Fechar</button><button class="pri" data-reg>Registrar mamadeira</button></div>`;
+ let med=0,agua=0;
+ const calc=()=>{want=Math.max(1,Math.min(300,Math.round(+$('#pW').value||0)));med=Math.ceil(want/per);agua=med*per;const sobra=agua-want;
+  s.querySelectorAll('[data-w]').forEach(x=>x.classList.toggle('on',+x.dataset.w===want));
+  $('#pRes').innerHTML=`<div class="big"><div><b>${agua}</b>ml de água</div><span class="plus">+</span><div><b>${med}</b>${med===1?'medida rasa':'medidas rasas'}</div></div>`+
+   (sobra?`<p>Não dá para medir fração de medida com precisão, então o cálculo arredonda para cima.</p><p class="warn">Ofereça até ${want} ml. Sobram ${sobra} ml, que devem ser descartados (não guarde para a próxima).</p>`:`<p>Proporção exata: ${want} ml prontos, sem sobra.</p>`)};
+ calc();$('#pW').addEventListener('input',calc);
+ $('#sheetBg').classList.add('on');
+ s.onclick=e=>{const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.w){$('#pW').value=b.dataset.w;calc()}
+  if('close'in b.dataset)closeSheet();
+  if('reg'in b.dataset){closeSheet();openSheet('mamadeira',null,{ml:want,preparado:agua>want?agua:0})}};
+}
 function closeSheet(){$('#sheetBg').classList.remove('on')}
 $('#sheetBg').addEventListener('click',e=>{if(e.target.id==='sheetBg')closeSheet()});
 
@@ -314,6 +344,7 @@ document.addEventListener('click',async e=>{
  const b=e.target.closest('button');if(!b||b.closest('#sheet')||b.closest('#toast'))return;const D=b.dataset;
  if(D.tab){tab=D.tab;window.scrollTo(0,0);render()}
  else if(D.new)openSheet(D.new);
+ else if('prep'in D)openPrep();
  else if(D.edit){const r=regs.find(x=>x.id===D.edit);if(r&&T[r.tipo])openSheet(r.tipo,r)}
  else if(D.day){dayOff=Math.max(0,dayOff+Number(D.day));renderHome()}
  else if(D.st){stType=D.st;stMet='vezes';renderStats()}
@@ -321,7 +352,7 @@ document.addEventListener('click',async e=>{
  else if(D.wk){wkOff=Math.max(0,wkOff+Number(D.wk));renderStats()}
  else if(D.tf){tlF=D.tf;renderTL()}
  else if('tlmore'in D){tlDays+=14;renderTL()}
- else if('savebebe'in D){const nome=$('#cNome').value.trim().slice(0,40),nasc=$('#cNasc').value;if(!nome)return;if(await write(()=>sb.from('bebe').upsert({id:1,nome,nascimento:nasc||null})))showToast('Bebê salvo',null)}
+ else if('savebebe'in D){const nome=$('#cNome').value.trim().slice(0,40),nasc=$('#cNasc').value,formula=$('#cForm').value.trim().slice(0,60)||'Fórmula',per=Math.round(+$('#cPer').value||0);if(!nome||!(per>=10&&per<=100))return;if(await write(()=>sb.from('bebe').upsert({id:1,nome,nascimento:nasc||null,formula,ml_por_medida:per})))showToast('Bebê salvo',null)}
  else if('csv'in D){const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
   const lines=[['data','hora','tipo','detalhe','nota','quem'].join(';'),...regs.slice().sort((a,b)=>num(a.t)-num(b.t)).map(r=>{const d=new Date(num(r.t));return[`${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`,hm(r.t),(T[r.tipo]||{}).n||r.tipo,detail(r),r.nota||'',names[r.por]||''].map(q).join(';')})];
   const blob=new Blob(['\ufeff'+lines.join('\n')],{type:'text/csv'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='diario-da-lu.csv';document.body.appendChild(a);a.click();a.remove();showToast('CSV baixado',null)}
@@ -333,7 +364,7 @@ async function reload(){
  if(r.error){connected=false;renderHead();return}
  regs=(r.data||[]).map(x=>({...x,t:num(x.t),fim:x.fim==null?null:num(x.fim),temp:x.temp==null?null:num(x.temp)})).filter(x=>T[x.tipo]);
  sono=so.data&&Number.isFinite(num(so.data.inicio))&&so.data.inicio?{...so.data,inicio:num(so.data.inicio)}:null;
- bebe=be.data?{nome:be.data.nome,nascimento:be.data.nascimento||''}:bebe;connected=true;
+ bebe=be.data?{nome:be.data.nome,nascimento:be.data.nascimento||'',formula:be.data.formula,ml_por_medida:be.data.ml_por_medida}:bebe;connected=true;
  if(!$('#sheetBg').classList.contains('on'))render();else renderHead();
 }
 let chan=null,rt=0;
