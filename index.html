@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Diário da Lu">
-<meta name="theme-color" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#251a21">
 <link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-192.png">
 <title>Diário da Lu</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,8 +14,12 @@
    PICTURE: round quick buttons with "how long ago" under each, and the 24-hour strip
    COLOUR/TYPE: deep plum night, milk white, one colour per activity; Nunito
    LAYOUT: one column app with bottom tabs: Início, Estatísticas, Linha do tempo, Conta */
-:root{color-scheme:light;--bg:#f7a6ba;--card:#fff;--card2:#fdeef3;--ink:#3b2f36;--mute:#a08f98;--line:#f7e3ea;--head:#fff;--night:#fcf0f4;--pink:#ef7f9d;
+:root{color-scheme:light;--bg:#f7a6ba;--card:#fff;--card2:#fdeef3;--ink:#3b2f36;--mute:#a08f98;--line:#f7e3ea;--head:#fff;--night:#fcf0f4;--pink:#ef7f9d;--onpink:#fff;
+--soft:#fde3eb;--soft2:#fff4f7;--sh:#b0466a55;--chip:#ffffffa6;--inp:#fff7f9;--inl:#f6dbe4;--hrc:#f6e6ec;--title:#fff;--bg2:#fff;
 --c-mamadeira:#ef7f9d;--c-fralda:#f0ad3a;--c-sono:#8a7bf2;--c-banho:#4aaee6;--c-saude:#34bf93}
+@media (prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#3b1e2b;--card:#251a21;--card2:#30232a;--ink:#f7e9ef;--mute:#b79daa;--line:#3a2a33;--head:#251a21;--night:#2d2027;--pink:#f490ad;--onpink:#2a121c;
+--soft:#4b2637;--soft2:#30232a;--sh:#0009;--chip:#ffffff1c;--inp:#30232a;--inl:#46303b;--hrc:#33262d;--title:#ffe1ea;--bg2:#251a21;
+--c-mamadeira:#f490ad;--c-fralda:#f2b74d;--c-sono:#9d90f6;--c-banho:#62bbee;--c-saude:#4fcfa3}}
 *{box-sizing:border-box;min-width:0}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 Nunito,system-ui,sans-serif;overflow-x:clip;-webkit-tap-highlight-color:transparent}
 button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;min-height:44px;border-radius:14px}
@@ -116,48 +120,48 @@ input{font:inherit;font-size:17px;font-weight:800;color:var(--ink);background:va
 @media(prefers-reduced-motion:no-preference){.qc{transition:transform .12s}.qb:active .qc{transform:scale(.92)}}
 
 /* friendly pink skin */
-header{background:#fff;color:var(--ink);flex-direction:column;justify-content:center;text-align:center;gap:6px;padding:18px 16px 46px;position:relative}
+header{background:var(--card);color:var(--ink);flex-direction:column;justify-content:center;text-align:center;gap:6px;padding:18px 16px 46px;position:relative}
 header>div:nth-child(2){display:flex;flex-direction:column;align-items:center}
 header b{font-size:26px}header small{color:var(--mute);opacity:1;font-size:15px}
-.av{width:92px;height:92px;background:#fde3eb;border:0;box-shadow:0 0 0 10px #fff4f7;color:var(--pink)}
+.av{width:92px;height:92px;background:var(--soft);border:0;box-shadow:0 0 0 10px var(--soft2);color:var(--pink)}
 .av svg{width:62px;height:62px}
 .sync{position:absolute;top:14px;right:16px;color:var(--mute);opacity:1}
 main{background:var(--bg);border-radius:34px 34px 0 0;margin-top:-26px;padding-top:20px}
-.quick{background:#fff;border-radius:28px;padding:16px 8px 12px;box-shadow:0 10px 24px -14px #b0466a55;margin-bottom:12px}
-.qc{color:var(--k);background:color-mix(in srgb,var(--k) 16%,#fff);box-shadow:none}
-.qc::before{content:"+";position:absolute;right:-3px;bottom:-3px;width:22px;height:22px;border-radius:50%;background:#fff;color:var(--k);font-weight:900;font-size:17px;line-height:21px;box-shadow:0 2px 6px #0002}
+.quick{background:var(--card);border-radius:28px;padding:16px 8px 12px;box-shadow:0 10px 24px -14px var(--sh);margin-bottom:12px}
+.qc{color:var(--k);background:color-mix(in srgb,var(--k) 18%,var(--card));box-shadow:none}
+.qc::before{content:"+";position:absolute;right:-3px;bottom:-3px;width:22px;height:22px;border-radius:50%;background:var(--card);color:var(--k);font-weight:900;font-size:17px;line-height:21px;box-shadow:0 2px 6px var(--sh)}
 .qc.on::after{border-color:var(--c-sono)}
 .qn{color:var(--ink);font-size:12.5px}.qa{color:var(--mute);font-weight:800}
-.prep>span{color:var(--ink)}.prep{border:0;border-radius:24px;box-shadow:0 10px 24px -14px #b0466a55}
-.dnav b{color:#fff;text-shadow:0 1px 2px #c0507044}
-.ar{background:#fff;border:0;color:var(--pink);border-radius:50%;width:46px;min-height:46px;box-shadow:0 6px 14px -8px #b0466a66}
+.prep>span{color:var(--ink)}.prep{border:0;border-radius:24px;box-shadow:0 10px 24px -14px var(--sh)}
+.dnav b{color:var(--title);text-shadow:0 1px 2px var(--sh)}
+.ar{background:var(--card);border:0;color:var(--pink);border-radius:50%;width:46px;min-height:46px;box-shadow:0 6px 14px -8px var(--sh)}
 .ar:disabled{opacity:.5}
-.strip{border:0;border-radius:24px;background:linear-gradient(90deg,var(--night) 0 25%,#fff 25% 75%,var(--night) 75%);box-shadow:0 10px 24px -14px #b0466a55}
-.hr{border-color:#f6e6ec}
-.card,.ent,.met{border:0;border-radius:24px;box-shadow:0 10px 24px -14px #b0466a55}
+.strip{border:0;border-radius:24px;background:linear-gradient(90deg,var(--night) 0 25%,var(--card) 25% 75%,var(--night) 75%);box-shadow:0 10px 24px -14px var(--sh)}
+.hr{border-color:var(--hrc)}
+.card,.ent,.met{border:0;border-radius:24px;box-shadow:0 10px 24px -14px var(--sh)}
 .met.on{box-shadow:0 0 0 3px var(--cur)}
-.ei{color:var(--k);background:color-mix(in srgb,var(--k) 16%,#fff)}
+.ei{color:var(--k);background:color-mix(in srgb,var(--k) 18%,var(--card))}
 .ent .ei{width:48px;height:48px}.ent{grid-template-columns:48px 1fr auto;align-items:center}
 .et{font-size:17px}.ed{color:var(--mute);font-weight:800}
-.who{background:#fde3eb;color:var(--pink)}
-h2,.empty{color:#fff}
-.chip{border:0;background:#ffffffa6;color:var(--ink);box-shadow:none}
-.chip.on{background:#fff;color:var(--pink);box-shadow:0 0 0 2px var(--pink) inset,0 4px 10px -6px #b0466a55}
-.tl{background:#fff;border-radius:24px;padding:6px 8px 4px;box-shadow:0 10px 24px -14px #b0466a55}
-.tlh{background:#fff;border-radius:18px}
-.more{border:0;background:#fff;color:var(--pink);border-radius:99px}
-.pri,.btn{background:var(--pink);color:#fff;border-radius:99px}
-.sec,.btn2{background:#fff;border:2px solid #fde3eb;color:var(--pink);border-radius:99px}
-.opt{border-radius:99px;border-color:#f6dbe4;background:#fff}
-.opt.on{background:var(--pink);border-color:var(--pink);color:#fff}
-input{background:#fff7f9;border-color:#f6dbe4}
+.who{background:var(--soft);color:var(--pink)}
+h2,.empty{color:var(--title)}
+.chip{border:0;background:var(--chip);color:var(--ink);box-shadow:none}
+.chip.on{background:var(--card);color:var(--pink);box-shadow:0 0 0 2px var(--pink) inset,0 4px 10px -6px var(--sh)}
+.tl{background:var(--card);border-radius:24px;padding:6px 8px 4px;box-shadow:0 10px 24px -14px var(--sh)}
+.tlh{background:var(--card);border-radius:18px}
+.more{border:0;background:var(--card);color:var(--pink);border-radius:99px}
+.pri,.btn{background:var(--pink);color:var(--onpink);border-radius:99px}
+.sec,.btn2{background:var(--card);border:2px solid var(--soft);color:var(--pink);border-radius:99px}
+.opt{border-radius:99px;border-color:var(--inl);background:var(--card)}
+.opt.on{background:var(--pink);border-color:var(--pink);color:var(--onpink)}
+input{background:var(--inp);border-color:var(--inl)}
 #sheet{border-radius:32px 32px 0 0}
-.res{background:#fff4f7;border:0}
-nav{border-top:0;box-shadow:0 -6px 20px -12px #b0466a44}
-nav button.on{color:var(--pink)}nav button.on svg{background:#fde3eb}
+.res{background:var(--soft2);border:0}
+nav{border-top:0;box-shadow:0 -6px 20px -12px var(--sh)}
+nav button.on{color:var(--pink)}nav button.on svg{background:var(--soft)}
 #login{background:var(--bg)}#login form{border-radius:30px}
-.note{background:#fff;color:var(--pink)}
-#toast{background:var(--ink);color:#fff;border-radius:99px}#toast button{background:#fff;color:var(--ink);border-radius:99px}
+.note{background:var(--card);color:var(--pink)}
+#toast{background:var(--ink);color:var(--bg2);border-radius:99px}#toast button{background:var(--bg2);color:var(--ink);border-radius:99px}
 </style></head><body>
 <div id="login" class="on"><form id="lForm" autocomplete="on"><h1>Diário da Lu</h1><p id="lSub">Entre com seu e-mail e senha.</p>
 <label class="f"><span>E-mail</span><input type="email" id="lEmail" autocomplete="username" required></label>
