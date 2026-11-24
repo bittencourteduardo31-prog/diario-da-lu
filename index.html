@@ -2,8 +2,8 @@
 <html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Diário da Lu">
-<meta name="theme-color" content="#5e2740">
+<meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Diário da Lu">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#8c3a57"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#5e2740">
 <link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-192.png">
 <title>Diário da Lu</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -79,7 +79,8 @@ h2{font-size:24px;font-weight:900;margin:6px 0 12px;line-height:1.1}
 .btn{background:var(--ink);color:var(--bg);font-weight:900;padding:0 18px}
 .btn2{background:var(--card2);font-weight:800;padding:0 16px}
 .ok{color:#3fb39c;font-weight:900}
-nav{position:fixed;left:0;right:0;bottom:calc(-1 * var(--gap,0px));background:var(--card);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:6px 6px calc(6px + env(safe-area-inset-bottom));z-index:5}
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:6px 6px calc(6px + env(safe-area-inset-bottom));z-index:5}
+nav::after{content:"";position:absolute;left:0;right:0;top:100%;height:200px;background:var(--card)}
 nav button{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11.5px;white-space:nowrap;font-weight:800;color:var(--mute);min-height:54px}
 nav button.on{color:var(--ink)}nav button.on svg{background:var(--card2);border-radius:99px;padding:2px 14px;width:52px}
 #sheetBg{position:fixed;inset:0;background:#0008;display:none;align-items:flex-end;justify-content:center;z-index:9}
@@ -384,8 +385,6 @@ $('#lForm').addEventListener('submit',async e=>{e.preventDefault();const email=$
   if(r.error){$('#lErr').textContent=/Invalid login/i.test(r.error.message)?'E-mail ou senha errados.':'Não deu certo: '+r.error.message;return}
   start(r.data.session);
  }finally{$('#lBtn').disabled=false}});
-function fixGap(){let g=0;try{if(navigator.standalone||matchMedia('(display-mode: standalone)').matches){const d=screen.height-window.innerHeight;if(d>0&&d<120)g=d}}catch(e){}document.documentElement.style.setProperty('--gap',g+'px')}
-fixGap();addEventListener('resize',fixGap);addEventListener('orientationchange',()=>setTimeout(fixGap,300));
 render();
 sb.auth.getSession().then(({data})=>{if(data.session)start(data.session)});
 }
