@@ -109,13 +109,6 @@ input{font:inherit;font-size:17px;font-weight:800;color:var(--ink);background:va
 #login h1{margin:0 0 4px;font-size:28px;font-weight:900}#login p{margin:0 0 18px;color:var(--mute);font-weight:700}
 #lErr{color:var(--c-mamadeira);font-weight:800;min-height:22px;margin:-4px 0 8px}
 .link{color:var(--mute);font-weight:800;text-decoration:underline;width:100%;margin-top:8px}
-.prep{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:10px 16px;margin:4px 0 8px;text-align:left}
-.prep b{font-weight:900}.prep span{color:var(--mute);font-size:13px;font-weight:700;display:block}.prep i{font-style:normal;font-size:22px;color:var(--c-mamadeira)}
-.res{background:var(--bg);border:1px solid var(--line);border-radius:18px;padding:16px;margin:4px 0 12px;text-align:center}
-.res .big{display:flex;justify-content:center;gap:18px;align-items:flex-end}
-.res .big div{font-size:15px;font-weight:800;color:var(--mute)}.res .big b{display:block;font-size:40px;line-height:1;font-weight:900;color:var(--ink);font-variant-numeric:tabular-nums}
-.res .plus{font-size:28px;font-weight:900;color:var(--mute);padding-bottom:18px}
-.res p{margin:12px 0 0;font-weight:700;font-size:15px}.res .warn{color:var(--c-saude)}
 .note{background:var(--card2);border-radius:14px;padding:10px 14px;font-weight:700;font-size:14px;margin-bottom:12px}
 @media(prefers-reduced-motion:no-preference){.qc{transition:transform .12s}.qb:active .qc{transform:scale(.92)}}
 
@@ -132,7 +125,6 @@ main{background:var(--bg);border-radius:34px 34px 0 0;margin-top:-26px;padding-t
 .qc::before{content:"+";position:absolute;right:-3px;bottom:-3px;width:22px;height:22px;border-radius:50%;background:var(--card);color:var(--k);font-weight:900;font-size:17px;line-height:21px;box-shadow:0 2px 6px var(--sh)}
 .qc.on::after{border-color:var(--c-sono)}
 .qn{color:var(--ink);font-size:12.5px}.qa{color:var(--mute);font-weight:800}
-.prep>span{color:var(--ink)}.prep{border:0;border-radius:24px;box-shadow:0 10px 24px -14px var(--sh)}
 .dnav b{color:var(--title);text-shadow:0 1px 2px var(--sh)}
 .ar{background:var(--card);border:0;color:var(--pink);border-radius:50%;width:46px;min-height:46px;box-shadow:0 6px 14px -8px var(--sh)}
 .ar:disabled{opacity:.5}
@@ -156,12 +148,21 @@ h2,.empty{color:var(--title)}
 .opt.on{background:var(--pink);border-color:var(--pink);color:var(--onpink)}
 input{background:var(--inp);border-color:var(--inl)}
 #sheet{border-radius:32px 32px 0 0}
-.res{background:var(--soft2);border:0}
 nav{border-top:0;box-shadow:0 -6px 20px -12px var(--sh)}
 nav button.on{color:var(--pink)}nav button.on svg{background:var(--soft)}
 #login{background:var(--bg)}#login form{border-radius:30px}
 .note{background:var(--card);color:var(--pink)}
 #toast{background:var(--ink);color:var(--bg2);border-radius:99px}#toast button{background:var(--bg2);color:var(--ink);border-radius:99px}
+.next{width:100%;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;background:var(--card);border:0;border-radius:24px;box-shadow:0 10px 24px -14px var(--sh);padding:12px 16px;margin:4px 0 8px;text-align:left}
+.next .bell{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;color:var(--pink);background:var(--soft)}
+.next .bell.off{color:var(--mute);background:var(--card2)}
+.next b{display:block;font-size:18px;font-weight:900;font-variant-numeric:tabular-nums}.next small{display:block;color:var(--mute);font-size:13px;font-weight:800}
+.next.atr .bell{background:var(--pink);color:var(--onpink)}.next.atr b{color:var(--pink)}
+.next i{font-style:normal;font-size:22px;color:var(--pink)}
+.bar2{height:6px;border-radius:3px;background:var(--card2);margin-top:6px;overflow:hidden}.bar2 div{height:100%;background:var(--pink);border-radius:3px}
+.sw{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border-radius:18px;background:var(--soft2);margin-bottom:14px}
+.sw b{display:block}.sw small{color:var(--mute);font-weight:700;font-size:13px;display:block}
+.ok2{color:var(--c-saude);font-weight:900}
 </style></head><body>
 <div id="login" class="on"><form id="lForm" autocomplete="on"><h1>Diário da Lu</h1><p id="lSub">Entre com seu e-mail e senha.</p>
 <label class="f"><span>E-mail</span><input type="email" id="lEmail" autocomplete="username" required></label>
@@ -252,7 +253,7 @@ function renderHome(){
  const SN={mamadeira:['mamadeira','mamadeiras'],fralda:['fralda','fraldas'],sono:['soneca','sonecas'],banho:['banho','banhos'],saude:['registro','registros']};
  const sum=ORDER.filter(k=>c[k]).map(k=>`<span style="color:${col(k)}">${ic(k,18)}<b style="color:var(--ink)">${c[k]}</b><small>${SN[k][c[k]===1?0:1]}${k==='mamadeira'&&ml?' · '+ml+' ml':''}${k==='sono'&&sl?' · '+durTxt(sl/1000):''}</small></span>`).join('');
  const list=items.filter(r=>num(r.t)>=d0).sort((a,b)=>num(b.t)-num(a.t));
- $('#view').innerHTML=quickRow()+`<button class="prep" data-prep ${(!db||!canWrite)?'disabled':''}><span><b>Preparar mamadeira</b><span>Calcula água e medidas da fórmula</span></span><i>›</i></button><div class="dnav"><button class="ar" data-day="1" aria-label="Dia anterior">‹</button><b>${dName(dayOff)}${dayOff>1?'':' · '+dLab(d0)}</b><button class="ar" data-day="-1" ${dayOff?'':'disabled'} aria-label="Próximo dia">›</button></div>`
+ $('#view').innerHTML=quickRow()+nextCard()+`<div class="dnav"><button class="ar" data-day="1" aria-label="Dia anterior">‹</button><b>${dName(dayOff)}${dayOff>1?'':' · '+dLab(d0)}</b><button class="ar" data-day="-1" ${dayOff?'':'disabled'} aria-label="Próximo dia">›</button></div>`
   +strip(d0,d1,strItems)
   +`<div class="card"><div class="lab">${age()?'Idade: '+esc(age()):'Resumo do dia'}</div><div class="sum">${sum||'<span class="lab">Nada registrado neste dia</span>'}</div></div>`
   +(list.length?list.map(entry).join(''):`<div class="empty">${dayOff?'Sem registros neste dia.':'Toque num botão lá em cima para registrar.'}</div>`);
@@ -306,8 +307,6 @@ function renderConta(){
  <div class="card"><div class="lab" style="margin-bottom:10px">Bebê</div>
   <label class="f"><span>Nome</span><input id="cNome" value="${esc((bebe&&bebe.nome)||'')}" maxlength="40"></label>
   <label class="f"><span>Nascimento</span><input type="date" id="cNasc" value="${esc((bebe&&bebe.nascimento)||'')}"></label>
-  <label class="f"><span>Fórmula</span><input id="cForm" value="${esc((bebe&&bebe.formula)||'')}" maxlength="60"></label>
-  <label class="f"><span>ml de água por medida (conforme a lata)</span><input type="number" inputmode="numeric" id="cPer" value="${num(bebe&&bebe.ml_por_medida)||30}" min="10" max="100"></label>
   <button class="btn" data-savebebe ${dis}>Salvar</button></div>
  <div class="card"><div class="lab">Cuidadores</div>${cu}<p class="lab" style="font-weight:700;margin:10px 0 0">Só os e-mails liberados no banco conseguem entrar. Para liberar outra pessoa (uma avó, por exemplo), peça ao Claude.</p></div>
  <div class="card"><div class="row2"><span><b>Exportar dados</b><br><span class="lab">Baixa tudo em CSV para abrir numa planilha</span></span><button class="btn2" data-csv>Baixar</button></div><div class="row2"><span><b>Sair desta conta</b></span><button class="btn2" data-logout>Sair</button></div></div>`;
@@ -364,26 +363,61 @@ function openSheet(k,rec,pre){
    if(k==='sono'){const f=fromIn($('#fF').value);if(f<=t){$('#fF').focus();return}o.fim=f;msg='Sono registrado'}
    closeSheet();saveReg(o,rec,msg)}};
 }
-function openPrep(){
- if(!db)return;const s=$('#sheet'),per=Math.max(10,num(bebe&&bebe.ml_por_medida)||30),fn=(bebe&&bebe.formula)||'fórmula';
- const last=lastOf('mamadeira');let want=last?num(last.ml)||per:per;
- s.innerHTML=`<h3><span class="ei" style="--k:${col('mamadeira')}">${ic('mamadeira',20)}</span>Preparar mamadeira</h3>
-  <p class="lab" style="margin:-6px 0 14px">${esc(fn)} · 1 medida rasa para cada ${per} ml de água</p>
-  <div class="f"><span>Quanto vai oferecer (ml)</span>${opts('w',[30,40,50,60,90].map(v=>[v,v]),want)}</div>
-  <label class="f"><span>Ou digite</span><input type="number" inputmode="numeric" id="pW" value="${want}"></label>
-  <div class="res" id="pRes"></div>
-  <div class="sbtns"><button class="sec" data-close>Fechar</button><button class="pri" data-reg>Registrar mamadeira</button></div>`;
- let med=0,agua=0;
- const calc=()=>{want=Math.max(1,Math.min(300,Math.round(+$('#pW').value||0)));med=Math.ceil(want/per);agua=med*per;const sobra=agua-want;
-  s.querySelectorAll('[data-w]').forEach(x=>x.classList.toggle('on',+x.dataset.w===want));
-  $('#pRes').innerHTML=`<div class="big"><div><b>${agua}</b>ml de água</div><span class="plus">+</span><div><b>${med}</b>${med===1?'medida rasa':'medidas rasas'}</div></div>`+
-   (sobra?`<p>Não dá para medir fração de medida com precisão, então o cálculo arredonda para cima.</p><p class="warn">Ofereça até ${want} ml. Sobram ${sobra} ml, que devem ser descartados (não guarde para a próxima).</p>`:`<p>Proporção exata: ${want} ml prontos, sem sobra.</p>`)};
- calc();$('#pW').addEventListener('input',calc);
- $('#sheetBg').classList.add('on');
- s.onclick=e=>{const b=e.target.closest('button');if(!b)return;
-  if(b.dataset.w){$('#pW').value=b.dataset.w;calc()}
-  if('close'in b.dataset)closeSheet();
-  if('reg'in b.dataset){closeSheet();openSheet('mamadeira',null,{ml:want,preparado:agua>want?agua:0})}};
+
+const VAPID='BAuNmORlHPRyrgmYSTmLiyka8-IhKfIBn1IsgAlAsgar1PMtL2er8WgV2awYWwdIY28sFN12iDO90tl0DxNDqOs';
+const BELL='<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>';
+const isStandalone=()=>{try{return navigator.standalone===true||matchMedia('(display-mode: standalone)').matches}catch(e){return false}};
+const pushOK=()=>'serviceWorker'in navigator&&'PushManager'in window&&'Notification'in window;
+let swReg=null,mySub=null;
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').then(r=>{swReg=r;return r.pushManager&&r.pushManager.getSubscription()}).then(sub=>{mySub=sub||null}).catch(()=>{});
+const durMin=m=>{m=Math.round(m);const h=Math.floor(m/60),x=m%60;return h?(x?h+'h'+pad(x):h+'h'):x+' min'};
+function nextInfo(){const l=lastOf('mamadeira');if(!l)return null;const iv=num(bebe&&bebe.intervalo_min)||180;const due=num(l.t)+iv*6e4;return{due,iv,last:l,left:due-Date.now()}}
+function nextCard(){
+ const n=nextInfo(),on=!bebe||bebe.alarme_ativo!==false,iv=num(bebe&&bebe.intervalo_min)||180;
+ if(!n)return`<button class="next" data-alarm><span class="bell${on?'':' off'}">${BELL}</span><span><b>Próxima mamada</b><small>Registre uma mamadeira para começar a contar · a cada ${durMin(iv)}</small></span><i>›</i></button>`;
+ const late=n.left<0,pct=Math.max(0,Math.min(100,100-n.left/(n.iv*6e4)*100));
+ const txt=late?`Atrasada há ${durMin(-n.left/6e4)}`:`Próxima às ${hm(n.due)}`,sub=late?`Era às ${hm(n.due)}`:`Em ${durMin(Math.ceil(n.left/6e4))}`;
+ return`<button class="next${late?' atr':''}" data-alarm><span class="bell${on?'':' off'}">${BELL}</span><span><b>${txt}</b><small>${sub} · ${on?'alarme ligado':'alarme desligado'} · a cada ${durMin(n.iv)}</small><div class="bar2"><div style="width:${pct.toFixed(1)}%"></div></div></span><i>›</i></button>`;
+}
+function b64(u){const p='='.repeat((4-u.length%4)%4),b=(u+p).replace(/-/g,'+').replace(/_/g,'/'),r=atob(b);return Uint8Array.from([...r].map(c=>c.charCodeAt(0)))}
+async function ativarPush(){
+ if(!pushOK()){showToast(isStandalone()?'Este celular não suporta notificações':'Abra pelo ícone da tela de início para ativar',null);return false}
+ const perm=await Notification.requestPermission();
+ if(perm!=='granted'){showToast('Notificações não permitidas. Libere em Ajustes › Notificações',null);return false}
+ const reg=swReg||await navigator.serviceWorker.ready;
+ let sub=await reg.pushManager.getSubscription();
+ if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64(VAPID)});
+ const j=sub.toJSON();
+ const ok=await write(()=>sb.from('push_subs').upsert({endpoint:j.endpoint,p256dh:j.keys.p256dh,auth:j.keys.auth,user_id:me}));
+ if(ok){mySub=sub;showToast('Alarme ativado neste celular',null)}
+ return ok;
+}
+async function testePush(){
+ try{const{data}=await sb.auth.getSession();const r=await fetch(SB_URL+'/functions/v1/alarme',{method:'POST',headers:{'Content-Type':'application/json',apikey:SB_KEY,Authorization:'Bearer '+data.session.access_token},body:JSON.stringify({teste:true})});
+  const j=await r.json().catch(()=>({}));showToast(j.ok?'Teste enviado. Deve chegar em segundos':'Não consegui enviar o teste',null)}catch(e){showToast('Não consegui enviar o teste',null)}
+}
+function openAlarm(){
+ if(!db)return;const s=$('#sheet');const st={iv:num(bebe&&bebe.intervalo_min)||180,on:!bebe||bebe.alarme_ativo!==false,pre:num(bebe&&bebe.aviso_antes_min)};
+ const n=nextInfo();
+ const render=()=>{const devOn=!!mySub&&typeof Notification!=='undefined'&&Notification.permission==='granted';
+  s.innerHTML=`<h3><span class="ei" style="--k:var(--pink)">${BELL}</span>Alarme das mamadas</h3>
+  ${n?`<p class="lab" style="margin:-6px 0 14px">Última mamadeira às ${hm(n.last.t)} · próxima às ${hm(num(n.last.t)+st.iv*6e4)}</p>`:''}
+  <div class="f"><span>Alarme</span>${opts('on',[['1','Ligado'],['0','Desligado']],st.on?'1':'0')}</div>
+  <div class="f"><span>Intervalo entre mamadas</span>${opts('iv',[[120,'2h'],[150,'2h30'],[180,'3h'],[210,'3h30'],[240,'4h']],st.iv)}</div>
+  <label class="f"><span>Ou digite o intervalo em minutos</span><input type="number" inputmode="numeric" id="aIv" value="${st.iv}" min="30" max="600"></label>
+  <div class="f"><span>Avisar antes</span>${opts('pre',[[0,'Na hora'],[10,'10 min'],[15,'15 min'],[30,'30 min']],st.pre)}</div>
+  <div class="sw"><span><b>Este celular</b><small>${devOn?'<span class="ok2">✓ Vai receber o alarme</span>':isStandalone()?'Ainda não recebe o alarme':'Abra pelo ícone da tela de início para ativar'}</small></span>${devOn?'<button class="btn2" data-teste>Testar</button>':'<button class="btn" data-ativar>Ativar</button>'}</div>
+  <div class="sbtns"><button class="sec" data-close>Cancelar</button><button class="pri" data-asave>Salvar</button></div>`};
+ render();$('#sheetBg').classList.add('on');
+ s.onclick=async e=>{const b=e.target.closest('button');if(!b)return;const D=b.dataset;
+  if(D.on){st.on=D.on==='1';s.querySelectorAll('[data-on]').forEach(x=>x.classList.toggle('on',x===b))}
+  if(D.iv){st.iv=+D.iv;$('#aIv').value=st.iv;s.querySelectorAll('[data-iv]').forEach(x=>x.classList.toggle('on',x===b))}
+  if(D.pre!==undefined){st.pre=+D.pre;s.querySelectorAll('[data-pre]').forEach(x=>x.classList.toggle('on',x===b))}
+  if('ativar'in D){const keep={iv:+$('#aIv').value||st.iv};if(await ativarPush()){st.iv=keep.iv;render();$('#aIv').value=keep.iv}}
+  if('teste'in D)testePush();
+  if('close'in D)closeSheet();
+  if('asave'in D){const iv=Math.round(+$('#aIv').value||st.iv);if(!(iv>=30&&iv<=600)){$('#aIv').focus();return}
+   closeSheet();if(await write(()=>sb.from('bebe').update({intervalo_min:iv,alarme_ativo:st.on,aviso_antes_min:st.pre}).eq('id',1)))showToast(st.on?`Alarme a cada ${durMin(iv)}`:'Alarme desligado',null)}};
 }
 function closeSheet(){$('#sheetBg').classList.remove('on')}
 $('#sheetBg').addEventListener('click',e=>{if(e.target.id==='sheetBg')closeSheet()});
@@ -392,7 +426,7 @@ document.addEventListener('click',async e=>{
  const b=e.target.closest('button');if(!b||b.closest('#sheet')||b.closest('#toast'))return;const D=b.dataset;
  if(D.tab){tab=D.tab;window.scrollTo(0,0);render()}
  else if(D.new)openSheet(D.new);
- else if('prep'in D)openPrep();
+ else if('alarm'in D)openAlarm();
  else if(D.edit){const r=regs.find(x=>x.id===D.edit);if(r&&T[r.tipo])openSheet(r.tipo,r)}
  else if(D.day){dayOff=Math.max(0,dayOff+Number(D.day));renderHome()}
  else if(D.st){stType=D.st;stMet='vezes';renderStats()}
@@ -400,7 +434,7 @@ document.addEventListener('click',async e=>{
  else if(D.wk){wkOff=Math.max(0,wkOff+Number(D.wk));renderStats()}
  else if(D.tf){tlF=D.tf;renderTL()}
  else if('tlmore'in D){tlDays+=14;renderTL()}
- else if('savebebe'in D){const nome=$('#cNome').value.trim().slice(0,40),nasc=$('#cNasc').value,formula=$('#cForm').value.trim().slice(0,60)||'Fórmula',per=Math.round(+$('#cPer').value||0);if(!nome||!(per>=10&&per<=100))return;if(await write(()=>sb.from('bebe').upsert({id:1,nome,nascimento:nasc||null,formula,ml_por_medida:per})))showToast('Bebê salvo',null)}
+ else if('savebebe'in D){const nome=$('#cNome').value.trim().slice(0,40),nasc=$('#cNasc').value;if(!nome)return;if(await write(()=>sb.from('bebe').update({nome,nascimento:nasc||null}).eq('id',1)))showToast('Bebê salvo',null)}
  else if('csv'in D){const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
   const lines=[['data','hora','tipo','detalhe','nota','quem'].join(';'),...regs.slice().sort((a,b)=>num(a.t)-num(b.t)).map(r=>{const d=new Date(num(r.t));return[`${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`,hm(r.t),(T[r.tipo]||{}).n||r.tipo,detail(r),r.nota||'',names[r.por]||''].map(q).join(';')})];
   const blob=new Blob(['\ufeff'+lines.join('\n')],{type:'text/csv'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='diario-da-lu.csv';document.body.appendChild(a);a.click();a.remove();showToast('CSV baixado',null)}
@@ -412,7 +446,7 @@ async function reload(){
  if(r.error){connected=false;renderHead();return}
  regs=(r.data||[]).map(x=>({...x,t:num(x.t),fim:x.fim==null?null:num(x.fim),temp:x.temp==null?null:num(x.temp)})).filter(x=>T[x.tipo]);
  sono=so.data&&Number.isFinite(num(so.data.inicio))&&so.data.inicio?{...so.data,inicio:num(so.data.inicio)}:null;
- bebe=be.data?{nome:be.data.nome,nascimento:be.data.nascimento||'',formula:be.data.formula,ml_por_medida:be.data.ml_por_medida}:bebe;connected=true;
+ bebe=be.data?{nome:be.data.nome,nascimento:be.data.nascimento||'',intervalo_min:num(be.data.intervalo_min)||180,alarme_ativo:be.data.alarme_ativo!==false,aviso_antes_min:num(be.data.aviso_antes_min)}:bebe;connected=true;
  if(!$('#sheetBg').classList.contains('on'))render();else renderHead();
 }
 let chan=null,rt=0;
