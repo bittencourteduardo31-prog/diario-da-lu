@@ -102,7 +102,7 @@ input{font:inherit;font-size:17px;font-weight:800;color:var(--ink);background:va
 .bigb{width:100%;min-height:64px;font-size:19px;font-weight:900;color:#fff;border-radius:18px;margin-bottom:14px}
 .or{text-align:center;color:var(--mute);font-weight:800;font-size:13px;margin:4px 0 12px}
 #toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--ink);color:var(--bg);border-radius:16px;padding:6px 6px 6px 16px;display:none;align-items:center;gap:10px;font-weight:800;z-index:10;max-width:92vw}
-#toast.on{display:flex}#toast button{background:var(--bg);color:var(--ink);padding:0 14px;min-height:40px;border-radius:12px}
+#toast.on{display:flex}#toast{width:min(92vw,420px);justify-content:space-between;border-radius:22px!important;padding:8px 8px 8px 18px}#toast span{flex:1 1 auto;line-height:1.25}#toast button{flex:none;white-space:nowrap;background:var(--bg);color:var(--ink);padding:0 14px;min-height:40px;border-radius:12px}
 #login{position:fixed;inset:0;background:var(--head);color:#fff;z-index:20;display:none;align-items:center;justify-content:center;padding:24px}
 #login.on{display:flex}
 #login form{width:100%;max-width:380px;background:var(--card);color:var(--ink);border-radius:26px;padding:24px 20px}
